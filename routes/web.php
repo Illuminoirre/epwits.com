@@ -23,6 +23,9 @@ Route::post('/applicantsubmit', [ApplicantController::class, 'store']);
 Route::get('/login', [AdminController::class, 'login'])->middleware('guest')->name('login');
 Route::post('/login', [AdminController::class, 'authenticate']);
 Route::post('/logout', [AdminController::class, 'logout']);
+Route::get('/coming-soon', function(){
+  return view('main.comingsoon');
+});
 
 Route::prefix('admin')->middleware(['auth', 'checkRole:Dev,Admin'])->group(function () {
   Route::resource('applicant', ApplicantController::class);
