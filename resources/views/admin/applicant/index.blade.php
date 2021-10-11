@@ -37,7 +37,7 @@
       </div>
       <div class="card card-danger">
         <div class="card-header">
-          <h3 class="card-title">Lists of EPW 2022 Indonesia Staff Applicants</h3>
+          <h3 class="card-title">Lists of EPW 2022 Staff Applicants</h3>
         </div>
         <div class="card-body">
           <table id="shortlinkList" class="table table-bordered table-hover">
@@ -68,7 +68,7 @@
                     @csrf
                     @method('DELETE')
                     <a href="/admin/applicant/{{ $applicant->nrp }}" class="btn btn-sm btn-info"><i class="fas fa-fw fa-eye"></i></a>
-                    <button type="submit" class="btn btn-sm btn-danger" style="border-color: none" onclick="confirm('Are you sure to delete this link?')"><i class="fas fa-fw fa-trash"></i></button>
+                    {{-- <button type="submit" class="btn btn-sm btn-danger" style="border-color: none" onclick="confirm('Are you sure to delete this link?')"><i class="fas fa-fw fa-trash"></i></button> --}}
                   </form>
                 </td>
               </tr>

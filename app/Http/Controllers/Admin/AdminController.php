@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Shortlink;
+use App\Models\Schedule;
 use App\Models\Applicant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,8 +46,25 @@ class AdminController extends Controller
     public function dashboard()
     {
         return view('admin.index', [
-            'shortlinks'      => Shortlink::all()->count(),
-            'applicants'      => Applicant::all()->count(),
+            'shortlinks'        => Shortlink::all()->count(),
+            'applicants'        => Applicant::all()->count(),
+            'staffs'            => Schedule::where('acceptance', '!=', null)->count()
         ]);
+    }
+
+    public function interview()
+    {
+        return view('admin.applicant.interview', [
+            'schedules'     => Schedule::all()
+        ]);
+    }
+
+    public function acceptance(Request $request)
+    {
+        $applicant = Schedule::firstWhere('nrp', $request->nrp);
+        $applicant->update([
+            'acceptance'    => 'Accepted'
+        ]);
+        return redirect('/admin/interview');
     }
 }

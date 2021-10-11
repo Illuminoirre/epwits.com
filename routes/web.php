@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ApplicantController;
+use App\Http\Controllers\Admin\ApplicantController;
 use App\Http\Controllers\Admin\ShortlinkController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
+
+use App\Http\Controllers\PagesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +19,18 @@ use App\Http\Controllers\Admin\AdminController;
 |
 */
 
-Route::get('/', [ApplicantController::class, 'create']);
-Route::post('/applicantsubmit', [ApplicantController::class, 'store']);
+// FOR MAIN WEBSITE
+// Route::get('/', [ApplicantController::class, 'create']);
+Route::get('/', [PagesController::class, 'comingsoon']);
 
+// FOR OPEN RECRUITMENT
+Route::post('/applicantsubmit', [ApplicantController::class, 'store']);
+Route::get('/InterviewAnnouncement', [ApplicantController::class, 'interviewAnnouncement']);
+Route::post('/InterviewAnnouncement', [ApplicantController::class, 'interviewSchedule']);
+Route::get('/StaffAnnouncement', [ApplicantController::class, 'staffAnnouncement']);
+Route::post('/StaffAnnouncement', [ApplicantController::class, 'welcomeparty']);
+
+// FOR AUTHENTICATION
 Route::get('/login', [AdminController::class, 'login'])->middleware('guest')->name('login');
 Route::post('/login', [AdminController::class, 'authenticate']);
 Route::post('/logout', [AdminController::class, 'logout']);
@@ -27,14 +38,22 @@ Route::get('/coming-soon', function(){
   return view('main.comingsoon');
 });
 
+// FOR ADMIN ACCESS
 Route::prefix('admin')->middleware(['auth', 'checkRole:Dev,Admin'])->group(function () {
   Route::resource('applicant', ApplicantController::class);
   Route::get('/', [AdminController::class, 'dashboard']);
   Route::resource('user', UserController::class);
   Route::put('/changepass', [UserController::class, 'changepass']);
   Route::get('/priority', [ApplicantController::class, 'priority']);
+  // Interview Schedule
+  Route::get('/interview', [AdminController::class, 'interview']);
+  Route::patch('/acceptance/{applicant:nrp}', [AdminController::class, 'acceptance']);
 
   Route::resource('shortlink', ShortlinkController::class);
 });
 
+// FOR SHORT LINKS
 Route::get('/{shortlink:short}', [ShortlinkController::class, 'show']);
+Route::fallback(function () {
+  return view('errors.404');
+});
